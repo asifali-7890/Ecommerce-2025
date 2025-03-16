@@ -1,0 +1,42 @@
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+.env
+
+# Logs
+logs/
+*.log
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Directories for packages
+client/node_modules/
+server/node_modules/
+
+# Build directories
+client/build/
+server/dist/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Dependency directories
+/client/node_modules
+/server/node_modules
+
+# Production build
+/client/build
+
+# Cache
+.cache/
+dist/

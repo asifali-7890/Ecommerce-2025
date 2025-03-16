@@ -1,0 +1,17 @@
+{
+  "name": "my-ecommerce-app",
+  "version": "1.0.0",
+  "description": "Fullstack app with client and server",
+  "main": "server/server.js",
+  "scripts": {
+    "client": "npm start --prefix client",
+    "server": "nodemon server/server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "nodemon": "^2.0.22"
+  },
+  "author": "Asif Ali",
+  "license": "ISC"
+}
