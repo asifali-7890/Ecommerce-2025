@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoute.js";
 import morgan from 'morgan';
 import cors from 'cors';
 import connectDB from './config/db.js';
+import categoryRoutes from "./routes/categoryRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(morgan('dev'));     // Log HTTP requests
 
 //routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/category", categoryRoutes);
 
 // Define a basic route
 app.get('/', (req, res) => {
