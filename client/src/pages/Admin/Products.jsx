@@ -22,30 +22,31 @@ const Products = () => {
   useEffect(() => {
     getAllProducts();
   }, []);
+
   return (
     <Layout>
-      <div className="row dashboard">
-        <div className="col-md-3">
+      <div className="flex flex-col md:flex-row dashboard p-4 pt-16">
+        <div className="w-full md:w-1/4 ">
           <AdminMenu />
         </div>
-        <div className="col-md-9 ">
-          <h1 className="text-center">All Products List</h1>
-          <div className="d-flex flex-wrap">
+        <div className="w-full md:w-3/4">
+          <h1 className="text-center text-2xl font-bold my-4">All Products List</h1>
+          <div className="flex flex-wrap justify-center">
             {products?.map((p) => (
               <Link
                 key={p._id}
                 to={`/dashboard/admin/product/${p.slug}`}
-                className="product-link"
+                className="m-2"
               >
-                <div className="card m-2" style={{ width: "18rem" }}>
+                <div className="bg-white shadow-md rounded-lg overflow-hidden w-72">
                   <img
                     src={`/api/v1/product/product-photo/${p._id}`}
-                    className="card-img-top"
+                    className="w-full h-48 object-cover"
                     alt={p.name}
                   />
-                  <div className="card-body">
-                    <h5 className="card-title">{p.name}</h5>
-                    <p className="card-text">{p.description}</p>
+                  <div className="p-4">
+                    <h5 className="text-lg font-semibold">{p.name}</h5>
+                    <p className="text-gray-600">{p.description}</p>
                   </div>
                 </div>
               </Link>
@@ -53,6 +54,7 @@ const Products = () => {
           </div>
         </div>
       </div>
+
     </Layout>
   );
 };

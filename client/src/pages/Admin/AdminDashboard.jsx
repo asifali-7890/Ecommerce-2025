@@ -6,20 +6,24 @@ const AdminDashboard = () => {
   const [auth] = useAuth();
   return (
     <Layout>
-      <div className="container-fluid m-3 p-3 dashboard">
-        <div className="row">
-          <div className="col-md-3 mt-8 w-1/4">
+      <div className="container mx-auto p-6">
+        <div className="flex flex-wrap justify-center items-center">
+          {/* Sidebar */}
+          <div className="w-full md:w-1/4 mt-8">
             <AdminMenu />
           </div>
-          <div className="col-md-9 mt-8">
-            <div className="card w-75 p-3">
-              <h3> Admin Name : {auth?.user?.name}</h3>
-              <h3> Admin Email : {auth?.user?.email}</h3>
-              <h3> Admin Contact : {auth?.user?.phone}</h3>
+
+          {/* Admin Info Card */}
+          <div className="w-full md:w-3/4 mt-8">
+            <div className="bg-white p-6 rounded-lg shadow-lg">
+              <h3 className="text-lg font-semibold mb-2">Admin Name: {auth?.user?.name}</h3>
+              <h3 className="text-lg font-semibold mb-2">Admin Email: {auth?.user?.email}</h3>
+              <h3 className="text-lg font-semibold">Admin Contact: {auth?.user?.phone}</h3>
             </div>
           </div>
         </div>
       </div>
+
     </Layout>
   );
 };

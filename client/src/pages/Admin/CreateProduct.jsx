@@ -15,13 +15,13 @@ const CreateProduct = () => {
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [quantity, setQuantity] = useState("");
-  const [shipping, setShipping] = useState("");
+  const [, setShipping] = useState("");
   const [photo, setPhoto] = useState("");
 
   //get all category
   const getAllCategory = async () => {
     try {
-      const { data } = await axios.get("/api/v1/category/get-category");
+      const { data } = await axios.get("/api/v1/category/get-categories");
       if (data?.success) {
         setCategories(data?.category);
       }
@@ -46,41 +46,50 @@ const CreateProduct = () => {
       productData.append("quantity", quantity);
       productData.append("photo", photo);
       productData.append("category", category);
-      const { data } = axios.post(
+
+      // Add await here to wait for the response
+      const { data } = await axios.post(
         "/api/v1/product/create-product",
         productData
       );
+
       if (data?.success) {
-        toast.error(data?.message);
-      } else {
         toast.success("Product Created Successfully");
         navigate("/dashboard/admin/products");
+      } else {
+        toast.error(data?.message);
       }
     } catch (error) {
       console.log(error);
-      toast.error("something went wrong");
+      toast.error("Something went wrong");
     }
   };
 
+
   return (
     <Layout title={"Dashboard - Create Product"}>
-      <div className="container-fluid m-3 p-3 dashboard">
-        <div className="row">
-          <div className="col-md-3">
+      <div className="container mx-auto p-6 pt-20 bg-gray-50 min-h-screen">
+        <div className="flex gap-8">
+          {/* Sidebar */}
+          <div className="w-1/4">
             <AdminMenu />
           </div>
-          <div className="col-md-9">
-            <h1>Create Product</h1>
-            <div className="m-1 w-75">
+
+          {/* Main Content */}
+          <div className="w-full md:w-3/4">
+            <div className="bg-white shadow-lg rounded-lg p-6">
+              <h1 className="text-2xl font-semibold text-gray-800 mb-6 text-center">
+                Create Product
+              </h1>
+
+              {/* Category Selector */}
               <Select
                 bordered={false}
                 placeholder="Select a category"
                 size="large"
                 showSearch
-                className="form-select mb-3"
-                onChange={(value) => {
-                  setCategory(value);
-                }}
+                className="form-select mb-5 w-full bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                onChange={(value) => setCategory(value)}
               >
                 {categories?.map((c) => (
                   <Option key={c._id} value={c._id}>
@@ -88,84 +97,97 @@ const CreateProduct = () => {
                   </Option>
                 ))}
               </Select>
-              <div className="mb-3">
-                <label className="btn btn-outline-secondary col-md-12">
-                  {photo ? photo.name : "Upload Photo"}
+
+              {/* File Upload */}
+              <div className="mb-5 w-full">
+                <label className="block w-full h-12 p-2">
+                  <span className="block bg-gray-100 border border-gray-300 text-gray-600 rounded-lg py-2 px-4 text-center cursor-pointer">
+                    {photo ? photo.name : "Upload Photo"}
+                  </span>
                   <input
                     type="file"
                     name="photo"
                     accept="image/*"
                     onChange={(e) => setPhoto(e.target.files[0])}
-                    hidden
+                    className="hidden"
                   />
                 </label>
               </div>
-              <div className="mb-3">
-                {photo && (
-                  <div className="text-center">
-                    <img
-                      src={URL.createObjectURL(photo)}
-                      alt="product_photo"
-                      height={"200px"}
-                      className="img img-responsive"
-                    />
-                  </div>
-                )}
-              </div>
-              <div className="mb-3">
+
+              {/* Display uploaded photo */}
+              {photo && (
+                <div className="mb-5 text-center">
+                  <img
+                    src={URL.createObjectURL(photo)}
+                    alt="product_photo"
+                    className="h-48 w-auto rounded-lg shadow-md mx-auto"
+                  />
+                </div>
+              )}
+
+              {/* Product Name */}
+              <div className="mb-5">
                 <input
                   type="text"
                   value={name}
-                  placeholder="write a name"
-                  className="form-control"
+                  placeholder="Product Name"
+                  className="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
-              <div className="mb-3">
+
+              {/* Product Description */}
+              <div className="mb-5">
                 <textarea
-                  type="text"
                   value={description}
-                  placeholder="write a description"
-                  className="form-control"
+                  placeholder="Product Description"
+                  className="form-textarea w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
 
-              <div className="mb-3">
+              {/* Price */}
+              <div className="mb-5">
                 <input
                   type="number"
                   value={price}
-                  placeholder="write a Price"
-                  className="form-control"
+                  placeholder="Product Price"
+                  className="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
-              <div className="mb-3">
+
+              {/* Quantity */}
+              <div className="mb-5">
                 <input
                   type="number"
                   value={quantity}
-                  placeholder="write a quantity"
-                  className="form-control"
+                  placeholder="Product Quantity"
+                  className="form-input w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </div>
-              <div className="mb-3">
+
+              {/* Shipping Option */}
+              <div className="mb-5">
                 <Select
                   bordered={false}
-                  placeholder="Select Shipping "
+                  placeholder="Select Shipping Option"
                   size="large"
-                  showSearch
-                  className="form-select mb-3"
-                  onChange={(value) => {
-                    setShipping(value);
-                  }}
+                  className="form-select w-full bg-white border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500"
+                  onChange={(value) => setShipping(value)}
                 >
-                  <Option value="0">No</Option>
-                  <Option value="1">Yes</Option>
+                  <Option value="0">No Shipping</Option>
+                  <Option value="1">Shipping Available</Option>
                 </Select>
               </div>
-              <div className="mb-3">
-                <button className="btn btn-primary" onClick={handleCreate}>
+
+              {/* Create Button */}
+              <div className="mb-5">
+                <button
+                  className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg shadow-lg transition-colors duration-200"
+                  onClick={handleCreate}
+                >
                   CREATE PRODUCT
                 </button>
               </div>

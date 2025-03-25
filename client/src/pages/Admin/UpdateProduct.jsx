@@ -45,7 +45,7 @@ const UpdateProduct = () => {
   //get all category
   const getAllCategory = async () => {
     try {
-      const { data } = await axios.get("/api/v1/category/get-category");
+      const { data } = await axios.get("/api/v1/category/get-categories");
       if (data?.success) {
         setCategories(data?.category);
       }
@@ -70,15 +70,15 @@ const UpdateProduct = () => {
       productData.append("quantity", quantity);
       photo && productData.append("photo", photo);
       productData.append("category", category);
-      const { data } = axios.put(
+      const { data } = await axios.put(
         `/api/v1/product/update-product/${id}`,
         productData
       );
       if (data?.success) {
-        toast.error(data?.message);
-      } else {
         toast.success("Product Updated Successfully");
         navigate("/dashboard/admin/products");
+      } else {
+        toast.error(data?.message);
       }
     } catch (error) {
       console.log(error);
@@ -91,7 +91,7 @@ const UpdateProduct = () => {
     try {
       let answer = window.prompt("Are You Sure want to delete this product ? ");
       if (!answer) return;
-      const { data } = await axios.delete(
+      await axios.delete(
         `/api/v1/product/delete-product/${id}`
       );
       toast.success("Product DEleted Succfully");
@@ -103,20 +103,20 @@ const UpdateProduct = () => {
   };
   return (
     <Layout title={"Dashboard - Create Product"}>
-      <div className="container-fluid m-3 p-3">
-        <div className="row">
-          <div className="col-md-3">
+      <div className="container mx-auto p-6">
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-12 md:col-span-3">
             <AdminMenu />
           </div>
-          <div className="col-md-9">
-            <h1>Update Product</h1>
-            <div className="m-1 w-75">
+          <div className="col-span-12 md:col-span-9">
+            <h1 className="text-2xl font-bold mb-4">Update Product</h1>
+            <div className="bg-white p-6 rounded-lg shadow-lg w-full md:w-3/4">
               <Select
                 bordered={false}
                 placeholder="Select a category"
                 size="large"
                 showSearch
-                className="form-select mb-3"
+                className="w-full mb-4"
                 onChange={(value) => {
                   setCategory(value);
                 }}
@@ -128,8 +128,10 @@ const UpdateProduct = () => {
                   </Option>
                 ))}
               </Select>
-              <div className="mb-3">
-                <label className="btn btn-outline-secondary col-md-12">
+
+              {/* File Upload */}
+              <div className="mb-5">
+                <label className="block w-full text-center bg-gray-100 border border-gray-300 text-gray-600 rounded-lg py-2 cursor-pointer">
                   {photo ? photo.name : "Upload Photo"}
                   <input
                     type="file"
@@ -140,14 +142,15 @@ const UpdateProduct = () => {
                   />
                 </label>
               </div>
-              <div className="mb-3">
+
+              {/* Image Preview */}
+              <div className="mb-5">
                 {photo ? (
                   <div className="text-center">
                     <img
                       src={URL.createObjectURL(photo)}
                       alt="product_photo"
-                      height={"200px"}
-                      className="img img-responsive"
+                      className="max-h-52 object-contain mx-auto"
                     />
                   </div>
                 ) : (
@@ -155,72 +158,83 @@ const UpdateProduct = () => {
                     <img
                       src={`/api/v1/product/product-photo/${id}`}
                       alt="product_photo"
-                      height={"200px"}
-                      className="img img-responsive"
+                      className="max-h-52 object-contain mx-auto"
                     />
                   </div>
                 )}
               </div>
-              <div className="mb-3">
+
+              {/* Product Name */}
+              <div className="mb-5">
                 <input
                   type="text"
                   value={name}
-                  placeholder="write a name"
-                  className="form-control"
+                  placeholder="Product Name"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
-              <div className="mb-3">
+
+              {/* Product Description */}
+              <div className="mb-5">
                 <textarea
-                  type="text"
                   value={description}
-                  placeholder="write a description"
-                  className="form-control"
+                  placeholder="Product Description"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
 
-              <div className="mb-3">
+              {/* Product Price */}
+              <div className="mb-5">
                 <input
                   type="number"
                   value={price}
-                  placeholder="write a Price"
-                  className="form-control"
+                  placeholder="Product Price"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
-              <div className="mb-3">
+
+              {/* Product Quantity */}
+              <div className="mb-5">
                 <input
                   type="number"
                   value={quantity}
-                  placeholder="write a quantity"
-                  className="form-control"
+                  placeholder="Product Quantity"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </div>
-              <div className="mb-3">
+
+              {/* Shipping Option */}
+              <div className="mb-5">
                 <Select
                   bordered={false}
-                  placeholder="Select Shipping "
+                  placeholder="Select Shipping"
                   size="large"
                   showSearch
-                  className="form-select mb-3"
-                  onChange={(value) => {
-                    setShipping(value);
-                  }}
-                  value={shipping ? "yes" : "No"}
+                  className="w-full mb-3"
+                  onChange={(value) => setShipping(value)}
+                  value={shipping ? "Yes" : "No"}
                 >
                   <Option value="0">No</Option>
                   <Option value="1">Yes</Option>
                 </Select>
               </div>
-              <div className="mb-3">
-                <button className="btn btn-primary" onClick={handleUpdate}>
+
+              {/* Buttons */}
+              <div className="flex gap-4">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                  onClick={handleUpdate}
+                >
                   UPDATE PRODUCT
                 </button>
-              </div>
-              <div className="mb-3">
-                <button className="btn btn-danger" onClick={handleDelete}>
+                <button
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                  onClick={handleDelete}
+                >
                   DELETE PRODUCT
                 </button>
               </div>
@@ -228,6 +242,7 @@ const UpdateProduct = () => {
           </div>
         </div>
       </div>
+
     </Layout>
   );
 };

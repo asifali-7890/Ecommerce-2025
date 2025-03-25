@@ -3,7 +3,7 @@ import Layout from "../../components/Layout/Layout";
 import AdminMenu from "../../components/Layout/AdminMenu";
 import toast from "react-hot-toast";
 import axios from "axios";
-import CategoryForm from "../../components/Form/CategoryForm";
+import CategoryForm from "../../components/Form/CategoryForm.jsx";
 import { Modal } from "antd";
 const CreateCategory = () => {
   const [categories, setCategories] = useState([]);
@@ -33,7 +33,7 @@ const CreateCategory = () => {
   //get all cat
   const getAllCategory = async () => {
     try {
-      const { data } = await axios.get("/api/v1/category/get-category");
+      const { data } = await axios.get("/api/v1/category/get-categories");
       if (data?.success) {
         setCategories(data?.category);
       }
@@ -68,6 +68,7 @@ const CreateCategory = () => {
       console.log(error);
     }
   };
+
   //delete category
   const handleDelete = async (pId) => {
     try {
@@ -82,75 +83,79 @@ const CreateCategory = () => {
         toast.error(data.message);
       }
     } catch (error) {
+      console.log(error);
       toast.error("Somtihing went wrong");
     }
   };
   return (
     <Layout title={"Dashboard - Create Category"}>
-      <div className="container-fluid m-3 p-3 dashboard">
-        <div className="row">
-          <div className="col-md-3">
+      <div className="m-3 p-12 bg-white shadow-lg rounded-lg">
+        <div className="flex gap-5">
+          {/* Admin Menu Section */}
+          <div className="w-1/4">
             <AdminMenu />
           </div>
-          <div className="col-md-9">
-            <h1>Manage Category</h1>
-            <div className="p-3 w-50">
+
+          {/* Main Content Section */}
+          <div className="w-3/4">
+            <h1 className="text-xl font-bold mb-4">Manage Category</h1>
+
+            {/* Category Form */}
+            <div className="p-3 w-full max-w-md">
               <CategoryForm
                 handleSubmit={handleSubmit}
                 value={name}
                 setValue={setName}
               />
             </div>
-            <div className="w-75">
-              <table className="table">
-                <thead>
+
+            {/* Category Table */}
+            <div className="w-full overflow-x-auto mt-5">
+              <table className="min-w-full border border-gray-300">
+                <thead className="bg-gray-100">
                   <tr>
-                    <th scope="col">Name</th>
-                    <th scope="col">Actions</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Name</th>
+                    <th className="px-4 py-2 text-left font-medium text-gray-700">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {categories?.map((c) => (
-                    <>
-                      <tr>
-                        <td key={c._id}>{c.name}</td>
-                        <td>
-                          <button
-                            className="btn btn-primary ms-2"
-                            onClick={() => {
-                              setVisible(true);
-                              setUpdatedName(c.name);
-                              setSelected(c);
-                            }}
-                          >
-                            Edit
-                          </button>
-                          <button
-                            className="btn btn-danger ms-2"
-                            onClick={() => {
-                              handleDelete(c._id);
-                            }}
-                          >
-                            Delete
-                          </button>
-                        </td>
-                      </tr>
-                    </>
+                    <tr key={c._id} className="border-t border-gray-300">
+                      <td className="px-4 py-2">{c.name}</td>
+                      <td className="px-4 py-2 flex gap-2">
+                        <button
+                          className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                          onClick={() => {
+                            setVisible(true);
+                            setUpdatedName(c.name);
+                            setSelected(c);
+                          }}
+                        >
+                          Edit
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition"
+                          onClick={() => handleDelete(c._id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <Modal
-              onCancel={() => setVisible(false)}
-              footer={null}
-              visible={visible}
-            >
-              <CategoryForm
-                value={updatedName}
-                setValue={setUpdatedName}
-                handleSubmit={handleUpdate}
-              />
-            </Modal>
+
+            {/* Edit Modal */}
+            {visible && (
+              <Modal onCancel={() => setVisible(false)} footer={null} open={visible}>
+                <CategoryForm
+                  value={updatedName}
+                  setValue={setUpdatedName}
+                  handleSubmit={handleUpdate}
+                />
+              </Modal>
+            )}
           </div>
         </div>
       </div>
