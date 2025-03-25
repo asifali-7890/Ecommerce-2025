@@ -3,10 +3,13 @@ import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../context/auth";
 import toast from "react-hot-toast";
 import UserDropdown from "./UserDropdown";
+import SearchInput from "../Form/SearchInput.jsx";
+import CategoryDropdown from "./CategoryDropdown.jsx";
+import useCategory from "../../hooks/useCategory.js";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
-
+  const categories = useCategory();
   // Logout handler
   const handleLogout = () => {
     setAuth({
@@ -31,9 +34,12 @@ const Header = () => {
 
           {/* Navigation Links */}
           <div className="space-x-6 flex items-center">
+            <SearchInput />
             <Link to="/" className="hover:text-blue-400">
               Home
             </Link>
+
+            <CategoryDropdown categories={categories} />
 
             <Link to="/about" className="hover:text-blue-400">
               About

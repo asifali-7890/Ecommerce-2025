@@ -1,34 +1,51 @@
 import React from "react";
 import Layout from "../components/Layout/Layout";
 import { useSearch } from "../context/search";
+import { useNavigate } from "react-router-dom";
+
 const Search = () => {
-  const [values, setValues] = useSearch();
+  const [values,] = useSearch();
+  const navigate = useNavigate();
+
   return (
     <Layout title={"Search results"}>
-      <div className="container">
+      <div className="container mx-auto py-8">
         <div className="text-center">
-          <h1>Search Resuts</h1>
-          <h6>
+          <h1 className="text-3xl font-bold mb-4">Search Results</h1>
+          <h6 className="text-lg text-gray-600 mb-8">
             {values?.results.length < 1
               ? "No Products Found"
-              : `Found ${values?.results.length}`}
+              : `Found ${values?.results.length} Products`}
           </h6>
-          <div className="d-flex flex-wrap mt-4">
+
+          <div className="flex flex-wrap justify-center gap-6">
             {values?.results.map((p) => (
-              <div className="card m-2" style={{ width: "18rem" }}>
+              <div
+                className="bg-white shadow-md rounded-lg overflow-hidden w-72 "
+                key={p._id}
+              >
                 <img
                   src={`/api/v1/product/product-photo/${p._id}`}
-                  className="card-img-top"
+                  className="w-full h-48 object-cover"
                   alt={p.name}
                 />
-                <div className="card-body">
-                  <h5 className="card-title">{p.name}</h5>
-                  <p className="card-text">
+                <div className="p-4">
+                  <h5 className="text-lg font-semibold mb-2">{p.name}</h5>
+                  <p className="text-gray-600 mb-2">
                     {p.description.substring(0, 30)}...
                   </p>
-                  <p className="card-text"> $ {p.price}</p>
-                  <button class="btn btn-primary ms-1">More Details</button>
-                  <button class="btn btn-secondary ms-1">ADD TO CART</button>
+                  <p className="text-lg font-bold mb-4 text-gray-800">$ {p.price}</p>
+                  <div className="flex justify-between gap-2">
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
+                      onClick={() => navigate(`/product/${p.slug}`)}
+                    >
+                      More Details
+                    </button>
+                    <button className=" bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition">
+                      ADD TO CART
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
