@@ -12,7 +12,9 @@ import ForgotPasssword from "./pages/Auth/ForgotPasssword.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
 
 import Categories from "./pages/Categories.jsx";
+import CartPage from "./pages/CartPage.jsx";
 import CategoryProduct from "./pages/CategoryProduct.jsx";
+import Profile from "./pages/user/Profile.jsx";
 
 import AdminRoute from "./components/Routes/AdminRoute.jsx";
 import AdminDashboard from "./pages/Admin/AdminDashboard.jsx";
@@ -33,10 +35,12 @@ function App() {
         <Route path="/product/:slug" element={<ProductDetails />} />
 
         <Route path="/categories" element={<Categories />} />
+        <Route path="/cart" element={<CartPage />} />
         <Route path="/category/:slug" element={<CategoryProduct />} />
 
         <Route path="/dashboard" element={<PrivateRoute />}>
           <Route path="user" element={<Dashboard />} />
+          <Route path="user/profile" element={<Profile />} />
         </Route>
         <Route path="/dashboard" element={<AdminRoute />}>
           <Route path="admin" element={<AdminDashboard />} />

@@ -6,10 +6,14 @@ import UserDropdown from "./UserDropdown";
 import SearchInput from "../Form/SearchInput.jsx";
 import CategoryDropdown from "./CategoryDropdown.jsx";
 import useCategory from "../../hooks/useCategory.js";
+import { useCart } from "../../context/cart.jsx";
 
 const Header = () => {
   const [auth, setAuth] = useAuth();
   const categories = useCategory();
+
+  const [cart,] = useCart();
+
   // Logout handler
   const handleLogout = () => {
     setAuth({
@@ -41,7 +45,7 @@ const Header = () => {
 
             <CategoryDropdown categories={categories} />
 
-            <Link to="/about" className="hover:text-blue-400">
+            {/* <Link to="/about" className="hover:text-blue-400">
               About
             </Link>
 
@@ -51,7 +55,7 @@ const Header = () => {
 
             <Link to="/policy" className="hover:text-blue-400">
               Privacy Policy
-            </Link>
+            </Link> */}
 
             {!auth?.user ? (
               <>
@@ -65,6 +69,11 @@ const Header = () => {
             ) : <>
               <UserDropdown auth={auth} handleLogout={handleLogout} />
             </>}
+
+            <Link to="/cart" className="hover:text-blue-400 ml-2">
+              <span>Cart {cart?.length}</span>
+            </Link>
+
           </div>
         </div>
       </nav>

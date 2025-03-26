@@ -4,10 +4,12 @@ import { Checkbox, Radio } from "antd";
 import { Prices } from "../components/Prices";
 // import { useCart } from "../context/cart";
 import axios from "axios";
-// import toast from "react-hot-toast";
+import toast from "react-hot-toast";
 import Layout from "./../components/Layout/Layout";
 import { AiOutlineReload } from "react-icons/ai";
 import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../context/cart";
 
 const HomePage = () => {
   // const navigate = useNavigate();
@@ -19,6 +21,9 @@ const HomePage = () => {
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
+
+  const navigate = useNavigate();
+  const [cart, setCart] = useCart();
 
   //get all cat
   const getAllCategory = async () => {
@@ -189,7 +194,7 @@ const HomePage = () => {
                   <p className="text-gray-600 mb-4">
                     {p.description.substring(0, 60)}...
                   </p>
-                  {/* <div className="flex justify-between items-center">
+                  <div className="flex justify-between items-center">
                     <button
                       className="bg-blue-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-600 transition duration-200"
                       onClick={() => navigate(`/product/${p.slug}`)}
@@ -206,7 +211,7 @@ const HomePage = () => {
                     >
                       ADD TO CART
                     </button>
-                  </div> */}
+                  </div>
                 </div>
               </div>
             ))}
