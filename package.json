@@ -13,5 +13,8 @@
     "nodemon": "^2.0.22"
   },
   "author": "Asif Ali",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "braintree-web-drop-in-react": "^1.2.1"
+  }
 }

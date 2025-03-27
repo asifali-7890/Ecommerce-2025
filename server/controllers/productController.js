@@ -1,10 +1,21 @@
 import productModel from "../models/productModel.js";
 import categoryModel from "../models/categoryModel.js";
+import orderModel from "../models/orderModel.js";
 import fs from "fs";
 import slugify from "slugify";
 import dotenv from "dotenv";
+import braintree from "braintree";
 
 dotenv.config();
+
+
+//payment gateway
+var gateway = new braintree.BraintreeGateway({
+    environment: braintree.Environment.Sandbox,
+    merchantId: process.env.BRAINTREE_MERCHANT_ID,
+    publicKey: process.env.BRAINTREE_PUBLIC_KEY,
+    privateKey: process.env.BRAINTREE_PRIVATE_KEY,
+});
 
 export const createProductController = async (req, res) => {
     try {
@@ -306,5 +317,86 @@ export const productCategoryController = async (req, res) => {
             error,
             message: "Error While Getting products",
         });
+    }
+};
+
+
+
+
+
+//payment gateway api
+//token
+// export const braintreeTokenController = async (req, res) => {
+//     try {
+//         gateway.clientToken.generate({}, function (err, response) {
+//             if (err) {
+//                 res.status(500).send(err);
+//             } else {
+//                 res.send(response);
+//             }
+//         });
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };
+
+//payment
+// export const brainTreePaymentController = async (req, res) => {
+//     try {
+//         const { nonce, cart } = req.body;
+//         let total = 0;
+//         cart.map((i) => {
+//             total += i.price;
+//         });
+//         let newTransaction = gateway.transaction.sale(
+//             {
+//                 amount: total,
+//                 paymentMethodNonce: nonce,
+//                 options: {
+//                     submitForSettlement: true,
+//                 },
+//             },
+//             function (error, result) {
+//                 if (result) {
+//                     const order = new orderModel({
+//                         products: cart,
+//                         payment: result,
+//                         buyer: req.user._id,
+//                     }).save();
+//                     res.json({ ok: true });
+//                 } else {
+//                     res.status(500).send(error);
+//                 }
+//             }
+//         );
+//     } catch (error) {
+//         console.log(error);
+//     }
+// };
+
+
+export const paymentController = async (req, res) => {
+    try {
+        const { cart } = req.body;  // Just receiving the cart details now
+        let total = 0;
+        cart.map((i) => {
+            total += i.price;
+        });
+
+        // Save order in database without Braintree payment
+        const order = new orderModel({
+            products: cart,
+            buyer: req.user._id,  // Assuming req.user._id contains the authenticated user's ID
+            payment: {
+                amount: total,  // Add basic payment details like total amount (you can extend this as needed)
+            },
+        });
+
+        await order.save();  // Save the order
+
+        res.json({ ok: true, message: "Order created successfully" });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: "Order creation failed" });
     }
 };

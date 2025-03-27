@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import AdminMenu from "../../components/Layout/AdminMenu";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import CategoryForm from "../../components/Form/CategoryForm.jsx";
 import { Modal } from "antd";
@@ -20,6 +20,7 @@ const CreateCategory = () => {
       });
       if (data?.success) {
         toast.success(`${name} is created`);
+        setName("");
         getAllCategory();
       } else {
         toast.error(data.message);
@@ -89,7 +90,8 @@ const CreateCategory = () => {
   };
   return (
     <Layout title={"Dashboard - Create Category"}>
-      <div className="m-3 p-12 bg-white shadow-lg rounded-lg">
+      <Toaster />
+      <div className="m-3 p-12 bg-white shadow-lg rounded-lg mt-20">
         <div className="flex gap-5">
           {/* Admin Menu Section */}
           <div className="w-1/4">

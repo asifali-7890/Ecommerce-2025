@@ -5,13 +5,13 @@ import { useAuth } from "../context/auth";
 import { useNavigate } from "react-router-dom";
 import DropIn from "braintree-web-drop-in-react";
 import axios from "axios";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const CartPage = () => {
   const [auth,] = useAuth();
   const [cart, setCart] = useCart();
-  const [clientToken, setClientToken] = useState("");
-  const [instance, setInstance] = useState("");
+  // const [clientToken, setClientToken] = useState("");
+  // const [instance, setInstance] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
@@ -43,43 +43,39 @@ const CartPage = () => {
     }
   };
 
-  //get payment gateway token
-  const getToken = async () => {
-    try {
-      const { data } = await axios.get("/api/v1/product/braintree/token");
-      setClientToken(data?.clientToken);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    getToken();
-  }, [auth?.token]);
-
-  //handle payments
   const handlePayment = async () => {
     try {
+      console.log("Payment started");
       setLoading(true);
-      const { nonce } = await instance.requestPaymentMethod();
-      await axios.post("/api/v1/product/braintree/payment", {
-        nonce,
-        cart,
+
+      const response = await axios.post("/api/v1/product/braintree/payment", {
+        cart
       });
+
+      console.log("Payment response:", response);
+
       setLoading(false);
       localStorage.removeItem("cart");
       setCart([]);
-      navigate("/dashboard/user/orders");
-      toast.success("Payment Completed Successfully ");
+
+      console.log("Toast success triggered");
+      toast.success("Payment Completed Successfully");
+
+      setTimeout(() => {
+        navigate("/dashboard/user/orders");
+      }, 2000);
     } catch (error) {
-      console.log(error);
+      console.log("Error:", error);
+      toast.error("Payment failed. Please try again.");
       setLoading(false);
     }
   };
+
 
   return (
     <Layout>
       <div className="pt-10 mt-10">
+        <Toaster />
         <div className="flex justify-center">
           <div className="w-full">
             <h1 className="text-center bg-gray-100 p-4 mb-4 text-2xl">
@@ -169,23 +165,29 @@ const CartPage = () => {
 
                 {/* Payment Section */}
                 <div className="mt-6">
-                  {!clientToken || !auth?.token || !cart?.length ? (
+                  {/* {console.log("Client Token:", clientToken)} */}
+                  {/* {console.log("Auth Token:", auth?.token)} */}
+                  {/* {console.log("Cart Length:", cart?.length)} */}
+                  {!auth?.token || !cart?.length ? (
                     ""
                   ) : (
                     <>
-                      <DropIn
+                      {/* <DropIn
                         options={{
                           authorization: clientToken,
                           paypal: {
                             flow: "vault",
                           },
                         }}
-                        onInstance={(instance) => setInstance(instance)}
-                      />
+                        onInstance={(instance) => {
+                          console.log("DropIn instance:", instance); // Debugging
+                          setInstance(instance);
+                        }}
+                      /> */}
                       <button
                         className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 mt-4"
-                        onClick={handlePayment}
-                        disabled={loading || !instance || !auth?.user?.address}
+                        onClick={() => { handlePayment(); }}
+                        disabled={loading || !auth?.user?.address}
                       >
                         {loading ? "Processing ...." : "Make Payment"}
                       </button>
@@ -197,7 +199,7 @@ const CartPage = () => {
           </div>
         </div>
       </div>
-
+      <Toaster />
     </Layout>
   );
 };

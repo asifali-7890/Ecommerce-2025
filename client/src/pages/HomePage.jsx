@@ -76,7 +76,6 @@ const HomePage = () => {
       setLoading(true);
       const { data } = await axios.get(`/api/v1/product/product-list/${page}`);
       setLoading(false);
-      // eslint-disable-next-line no-unsafe-optional-chaining
       setProducts([...products, ...data?.products]);
     } catch (error) {
       console.log(error);

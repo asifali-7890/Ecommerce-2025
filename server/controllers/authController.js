@@ -1,3 +1,4 @@
+import orderModel from '../models/orderModel.js';
 import userModel from '../models/userModel.js'; // Import userModel
 import { comparePassword, hashPassword } from "./../helpers/authHelper.js";
 import JWT from 'jsonwebtoken';
@@ -168,6 +169,67 @@ export const updateProfileController = async (req, res) => {
         res.status(400).send({
             success: false,
             message: "Error WHile Update profile",
+            error,
+        });
+    }
+};
+
+
+
+
+
+//orders
+export const getOrdersController = async (req, res) => {
+    try {
+        const orders = await orderModel
+            .find({ buyer: req.user._id })
+            .populate("products", "-photo")
+            .populate("buyer", "name");
+        res.json(orders);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error WHile Geting Orders",
+            error,
+        });
+    }
+};
+//orders
+export const getAllOrdersController = async (req, res) => {
+    try {
+        const orders = await orderModel
+            .find({})
+            .populate("products", "-photo")
+            .populate("buyer", "name")
+            .sort({ createdAt: -1 });  // Use -1 as a number, not a string
+        res.json(orders);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error While Getting Orders",
+            error,
+        });
+    }
+};
+
+//order status
+export const orderStatusController = async (req, res) => {
+    try {
+        const { orderId } = req.params;
+        const { status } = req.body;
+        const orders = await orderModel.findByIdAndUpdate(
+            orderId,
+            { status },
+            { new: true }
+        );
+        res.json(orders);
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error While Updateing Order",
             error,
         });
     }
