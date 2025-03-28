@@ -42,6 +42,7 @@ const UpdateProduct = () => {
     getSingleProduct();
     //eslint-disable-next-line
   }, []);
+
   //get all category
   const getAllCategory = async () => {
     try {

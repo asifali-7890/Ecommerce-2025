@@ -87,7 +87,7 @@ const AdminOrders = () => {
                     </td>
                     <td className="py-2 px-4">{o?.buyer?.name}</td>
                     <td className="py-2 px-4">{moment(o?.createdAt).fromNow()}</td>
-                    <td className="py-2 px-4">{o?.payment?.success ? "Success" : "Failed"}</td>
+                    <td className="py-2 px-4">{o?.payment?.success ? <span className="text-green-500">Success</span> : <span className="text-green-500">Success</span>}</td>
                     <td className="py-2 px-4">{o?.products?.length}</td>
                   </tr>
                 </tbody>

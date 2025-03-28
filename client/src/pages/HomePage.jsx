@@ -230,7 +230,7 @@ const HomePage = () => {
                   "Loading ..."
                 ) : (
                   <>
-                    Load More <AiOutlineReload className="inline-block ml-2" />
+                    {products ? <span>Load More <AiOutlineReload className="inline-block ml-2" /></span> : ''}
                   </>
                 )}
               </button>
