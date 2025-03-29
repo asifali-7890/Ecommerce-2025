@@ -43,20 +43,20 @@ const CartPage = () => {
 
   const handlePayment = async () => {
     try {
-      console.log("Payment started");
+      // console.log("Payment started");
       setLoading(true);
 
-      const response = await axios.post("/api/v1/product/braintree/payment", {
+      await axios.post("/api/v1/product/braintree/payment", {
         cart
       });
 
-      console.log("Payment response:", response);
+      // console.log("Payment response:", response);
 
       setLoading(false);
       localStorage.removeItem("cart");
       setCart([]);
 
-      console.log("Toast success triggered");
+      // console.log("Toast success triggered");
       toast.success("Payment Completed Successfully");
 
       setTimeout(() => {

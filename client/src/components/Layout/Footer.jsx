@@ -33,8 +33,8 @@ const Footer = () => {
             <Link to="#" className="text-blue-400 hover:text-blue-300 transition duration-200">
               Twitter
             </Link>
-            <Link to="#" className="text-blue-400 hover:text-blue-300 transition duration-200">
-              Instagram
+            <Link to="https://www.linkedin.com/in/asifaliquraishy/" className="text-blue-400 hover:text-blue-300 transition duration-200">
+              Linkedin
             </Link>
           </div>
         </div>
