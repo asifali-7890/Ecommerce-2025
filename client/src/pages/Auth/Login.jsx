@@ -44,11 +44,11 @@ const Login = () => {
   };
 
   return (
-    <Layout title="Login - Ecommer App">
+    <Layout title="Login - Ecommerce App">
       <Toaster /> {/* Include this at the root of your app */}
       <div className="flex justify-center items-center min-h-screen bg-gray-100">
         <div className="w-full max-w-md p-8 space-y-8 bg-white shadow-lg rounded-lg">
-          <h2 className="text-center text-3xl font-bold">Login</h2>
+          <h2 className="text-center text-3xl font-bold text-gray-800">Login</h2>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700">
@@ -57,7 +57,7 @@ const Login = () => {
               <input
                 type="email"
                 id="email"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
@@ -71,13 +71,12 @@ const Login = () => {
               <input
                 type="password"
                 id="password"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
             </div>
-
 
             <button
               type="submit"
@@ -88,22 +87,21 @@ const Login = () => {
             <p className="text-center text-sm text-gray-600 pt-4 flex justify-between">
               <button
                 type="button"
-                className="btn hover:underline"
+                className="hover:underline text-blue-500"
                 onClick={() => {
                   navigate("/forgot-password");
                 }}
               >
-                Forgot Password
+                Forgot Password?
               </button>
               <span>
-                Dont have an account? <Link to="/register" className="text-blue-500 mr-2 hover:underline">Register</Link>
+                Don't have an account? <Link to="/register" className="text-blue-500 hover:underline">Register</Link>
               </span>
             </p>
           </form>
         </div>
       </div>
     </Layout>
-
   );
 };
 

@@ -45,31 +45,31 @@ const AdminOrders = () => {
   return (
     <Layout title="All Orders Data">
       <Toaster />
-      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 pt-24">
+      <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Admin Menu */}
-        <div>
+        <div className="bg-white shadow-md rounded-lg p-4">
           <AdminMenu />
         </div>
 
         {/* Orders Section */}
         <div className="col-span-2">
-          <h1 className="text-center text-2xl font-semibold mb-6">All Orders</h1>
+          <h1 className="text-center text-2xl font-semibold mb-6 text-gray-800">All Orders</h1>
 
           {orders?.map((o, i) => (
-            <div key={i} className="border shadow-lg rounded-lg mb-6">
-              <table className="min-w-full table-auto text-left bg-white">
+            <div key={i} className="border shadow-lg rounded-lg mb-6 bg-white">
+              <table className="min-w-full table-auto text-left">
                 <thead>
                   <tr className="bg-gray-100">
-                    <th className="py-2 px-4">#</th>
-                    <th className="py-2 px-4">Status</th>
-                    <th className="py-2 px-4">Buyer</th>
-                    <th className="py-2 px-4">Date</th>
-                    <th className="py-2 px-4">Payment</th>
-                    <th className="py-2 px-4">Quantity</th>
+                    <th className="py-2 px-4 font-medium text-gray-700">#</th>
+                    <th className="py-2 px-4 font-medium text-gray-700">Status</th>
+                    <th className="py-2 px-4 font-medium text-gray-700">Buyer</th>
+                    <th className="py-2 px-4 font-medium text-gray-700">Date</th>
+                    <th className="py-2 px-4 font-medium text-gray-700">Payment</th>
+                    <th className="py-2 px-4 font-medium text-gray-700">Quantity</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
+                  <tr className="hover:bg-gray-50 transition duration-200">
                     <td className="py-2 px-4">{i + 1}</td>
                     <td className="py-2 px-4">
                       <Select
@@ -87,19 +87,22 @@ const AdminOrders = () => {
                     </td>
                     <td className="py-2 px-4">{o?.buyer?.name}</td>
                     <td className="py-2 px-4">{moment(o?.createdAt).fromNow()}</td>
-                    <td className="py-2 px-4">{o?.payment?.success ? <span className="text-green-500">Success</span> : <span className="text-green-500">Success</span>}</td>
+                    <td className="py-2 px-4">
+                      {o?.payment?.success ? (
+                        <span className="text-green-500">Success</span>
+                      ) : (
+                        <span className="text-red-500">Failed</span>
+                      )}
+                    </td>
                     <td className="py-2 px-4">{o?.products?.length}</td>
                   </tr>
                 </tbody>
               </table>
 
               {/* Product Details */}
-              <div className="p-4 bg-gray-50">
-                {o?.products?.map((p, i) => (
-                  <div
-                    key={p._id}
-                    className="flex items-center bg-white shadow-sm p-4 mb-4 rounded-lg"
-                  >
+              <div className="p-4 bg-gray-50 rounded-b-lg">
+                {o?.products?.map((p) => (
+                  <div key={p._id} className="flex items-center bg-white shadow-sm p-4 mb-4 rounded-lg">
                     <div className="flex-shrink-0">
                       <img
                         src={`/api/v1/product/product-photo/${p._id}`}

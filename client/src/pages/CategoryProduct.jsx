@@ -28,12 +28,14 @@ const CategoryProduct = () => {
   return (
     <Layout>
       <div className="container mx-auto mt-6">
-        <h4 className="text-center text-2xl font-semibold">Category - {category?.name}</h4>
-        <h6 className="text-center text-gray-600">{products?.length} result{products?.length !== 1 && "s"} found</h6>
+        <h4 className="text-center text-3xl font-semibold mb-2">Category - {category?.name}</h4>
+        <h6 className="text-center text-gray-600 mb-6">
+          {products?.length} result{products?.length !== 1 && "s"} found
+        </h6>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products?.map((p) => (
-            <div key={p._id} className="card bg-white shadow-md hover:shadow-lg rounded-lg overflow-hidden">
+            <div key={p._id} className="card bg-white shadow-md hover:shadow-lg rounded-lg overflow-hidden transition-shadow duration-300">
               <img
                 src={`/api/v1/product/product-photo/${p._id}`}
                 alt={p.name}
@@ -61,7 +63,6 @@ const CategoryProduct = () => {
           ))}
         </div>
       </div>
-
     </Layout>
   );
 };

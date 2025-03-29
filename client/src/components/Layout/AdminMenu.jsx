@@ -1,48 +1,78 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import { FiPlusSquare, FiPackage, FiList, FiShoppingBag } from "react-icons/fi";
 
 const AdminMenu = () => {
   return (
-    <>
-      <div className="text-center p-4 mt-16 bg-white shadow-lg rounded-lg">
-        <div className="flex flex-col items-center space-y-4">
+    <div className="w-full max-w-4xl mx-auto p-6">
+      <div className="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl shadow-xl border border-purple-100">
+        <div className="p-8 space-y-6">
           {/* Admin Panel Title */}
-          <h4 className="text-2xl font-bold text-gray-800 mb-6">Admin Panel</h4>
+          <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent mb-8">
+            Admin Dashboard
+          </h2>
 
-          {/* Create Category Link */}
-          <NavLink
-            to="/dashboard/admin/create-category"
-            className="w-full max-w-xs py-3 px-6 text-center bg-blue-500 text-white rounded-lg shadow-md hover:bg-blue-600 transition duration-200"
-          >
-            Create Category
-          </NavLink>
+          {/* Menu Items Container */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {/* Create Category */}
+            <NavLink
+              to="/dashboard/admin/create-category"
+              className={({ isActive }) =>
+                `flex items-center p-6 space-x-4 rounded-xl transition-all duration-300
+                ${isActive ?
+                  'bg-purple-600 text-white shadow-lg' :
+                  'bg-white hover:bg-purple-50 hover:shadow-md border border-purple-100'}`
+              }
+            >
+              <FiPlusSquare className="w-8 h-8 flex-shrink-0 text-purple-600" />
+              <span className="text-lg font-semibold">Create Category</span>
+            </NavLink>
 
-          {/* Create Product Link */}
-          <NavLink
-            to="/dashboard/admin/create-product"
-            className="w-full max-w-xs py-3 px-6 text-center bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transition duration-200"
-          >
-            Create Product
-          </NavLink>
+            {/* Create Product */}
+            <NavLink
+              to="/dashboard/admin/create-product"
+              className={({ isActive }) =>
+                `flex items-center p-6 space-x-4 rounded-xl transition-all duration-300
+                ${isActive ?
+                  'bg-blue-600 text-white shadow-lg' :
+                  'bg-white hover:bg-blue-50 hover:shadow-md border border-blue-100'}`
+              }
+            >
+              <FiPackage className="w-8 h-8 flex-shrink-0 text-blue-600" />
+              <span className="text-lg font-semibold">Create Product</span>
+            </NavLink>
 
-          {/* Products Link */}
-          <NavLink
-            to="/dashboard/admin/products"
-            className="w-full max-w-xs py-3 px-6 text-center bg-yellow-500 text-white rounded-lg shadow-md hover:bg-yellow-600 transition duration-200"
-          >
-            Products
-          </NavLink>
+            {/* Products */}
+            <NavLink
+              to="/dashboard/admin/products"
+              className={({ isActive }) =>
+                `flex items-center p-6 space-x-4 rounded-xl transition-all duration-300
+                ${isActive ?
+                  'bg-green-600 text-white shadow-lg' :
+                  'bg-white hover:bg-green-50 hover:shadow-md border border-green-100'}`
+              }
+            >
+              <FiList className="w-8 h-8 flex-shrink-0 text-green-600" />
+              <span className="text-lg font-semibold">Manage Products</span>
+            </NavLink>
 
-          {/* Orders Link */}
-          <NavLink
-            to="/dashboard/admin/orders"
-            className="w-full max-w-xs py-3 px-6 text-center bg-red-500 text-white rounded-lg shadow-md hover:bg-red-600 transition duration-200"
-          >
-            Orders
-          </NavLink>
+            {/* Orders */}
+            <NavLink
+              to="/dashboard/admin/orders"
+              className={({ isActive }) =>
+                `flex items-center p-6 space-x-4 rounded-xl transition-all duration-300
+                ${isActive ?
+                  'bg-pink-600 text-white shadow-lg' :
+                  'bg-white hover:bg-pink-50 hover:shadow-md border border-pink-100'}`
+              }
+            >
+              <FiShoppingBag className="w-8 h-8 flex-shrink-0 text-pink-600" />
+              <span className="text-lg font-semibold">View Orders</span>
+            </NavLink>
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

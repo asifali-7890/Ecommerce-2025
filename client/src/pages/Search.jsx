@@ -9,23 +9,23 @@ const Search = () => {
   const [values,] = useSearch();
   const navigate = useNavigate();
 
-  const [cart, setCart] = useCart();
+  const [, setCart] = useCart();
 
   return (
-    <Layout title={"Search results"}>
+    <Layout title={"Search Results"}>
       <div className="container mx-auto py-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold mb-4">Search Results</h1>
+          <h1 className="text-4xl font-bold mb-4">Search Results</h1>
           <h6 className="text-lg text-gray-600 mb-8">
             {values?.results.length < 1
               ? "No Products Found"
               : `Found ${values?.results.length} Products`}
           </h6>
 
-          <div className="flex flex-wrap justify-center gap-6">
+          <div className="flex flex-wrap justify-center gap-8">
             {values?.results.map((p) => (
               <div
-                className="bg-white shadow-md rounded-lg overflow-hidden w-72 "
+                className="bg-white flex flex-col justify-between shadow-lg rounded-lg overflow-hidden w-72 transition-transform transform hover:scale-105"
                 key={p._id}
               >
                 <img
@@ -36,10 +36,12 @@ const Search = () => {
                 <div className="p-4">
                   <h5 className="text-lg font-semibold mb-2">{p.name}</h5>
                   <p className="text-gray-600 mb-2">
-                    {p.description.substring(0, 30)}...
+                    {p.description.length > 30 ? `${p.description.substring(0, 30)}...` : p.description}
                   </p>
-                  <p className="text-lg font-bold mb-4 text-gray-800">$ {p.price}</p>
-                  <div className="flex justify-between gap-2">
+                  <p className="text-lg font-bold mb-4 text-gray-800">
+                    {p.price.toLocaleString("en-US", { style: "currency", currency: "USD" })}
+                  </p>
+                  <div className="flex justify-between gap-2 whitespace-nowrap">
                     <button
                       className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition"
                       onClick={() => navigate(`/product/${p.slug}`)}
@@ -47,11 +49,14 @@ const Search = () => {
                       More Details
                     </button>
                     <button
-                      className=" bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition"
+                      className="bg-gray-500 text-white px-4 py-2 rounded-md hover:bg-gray-600 transition"
                       onClick={() => {
-                        setCart([...cart, p]);
-                        localStorage.setItem("cart", JSON.stringify([...cart, p]));
-                        toast.success("Item Added to cart");
+                        setCart((prevCart) => {
+                          const newCart = [...prevCart, p];
+                          localStorage.setItem("cart", JSON.stringify(newCart));
+                          toast.success("Item Added to cart");
+                          return newCart;
+                        });
                       }}
                     >
                       ADD TO CART
@@ -63,7 +68,6 @@ const Search = () => {
           </div>
         </div>
       </div>
-
     </Layout>
   );
 };

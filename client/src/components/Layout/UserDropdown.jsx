@@ -11,18 +11,20 @@ const UserDropdown = ({ auth, handleLogout }) => {
     };
 
     return (
-        <div className="relative inline-block text-left m-0 p-0">
+        <div className="relative inline-block text-left">
             {/* Button to toggle dropdown */}
             <div>
                 <button
                     onClick={toggleDropdown}
                     type="button"
-                    className="flex items-center justify-between w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="inline-flex items-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
                 >
-                    <span className="text-gray-900">{auth?.user?.name}</span>
-                    <FaChevronDown className="ml-2" /> {/* Dropdown arrow */}
+                    <span className="text-gray-900 whitespace-nowrap">{auth?.user?.name}</span>
+                    <FaChevronDown className={`ml-2 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""}`} /> {/* Dropdown arrow */}
                 </button>
             </div>
+
+
 
             {/* Dropdown menu */}
             {dropdownOpen && (
@@ -36,7 +38,7 @@ const UserDropdown = ({ auth, handleLogout }) => {
                         {/* Dashboard link */}
                         <NavLink
                             to={`/dashboard/${auth?.user?.role === 1 ? "admin" : "user"}`}
-                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-200"
                             role="menuitem"
                         >
                             <FiUser className="mr-2" /> {/* User icon */}
@@ -47,7 +49,7 @@ const UserDropdown = ({ auth, handleLogout }) => {
                         <NavLink
                             onClick={handleLogout}
                             to="/login"
-                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-200"
                             role="menuitem"
                         >
                             <FiLogOut className="mr-2" /> {/* Logout icon */}

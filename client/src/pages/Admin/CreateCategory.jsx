@@ -92,15 +92,15 @@ const CreateCategory = () => {
     <Layout title={"Dashboard - Create Category"}>
       <Toaster />
       <div className="m-3 p-12 bg-white shadow-lg rounded-lg mt-20">
-        <div className="flex gap-5">
+        <div className="flex flex-col md:flex-row gap-5">
           {/* Admin Menu Section */}
-          <div className="w-1/4">
+          <div className="w-full md:w-1/4">
             <AdminMenu />
           </div>
 
           {/* Main Content Section */}
-          <div className="w-3/4">
-            <h1 className="text-xl font-bold mb-4">Manage Category</h1>
+          <div className="w-full md:w-3/4">
+            <h1 className="text-2xl font-bold mb-4 text-gray-800">Manage Category</h1>
 
             {/* Category Form */}
             <div className="p-3 w-full max-w-md">
@@ -122,7 +122,7 @@ const CreateCategory = () => {
                 </thead>
                 <tbody>
                   {categories?.map((c) => (
-                    <tr key={c._id} className="border-t border-gray-300">
+                    <tr key={c._id} className="border-t border-gray-300 hover:bg-gray-50 transition duration-200">
                       <td className="px-4 py-2">{c.name}</td>
                       <td className="px-4 py-2 flex gap-2">
                         <button

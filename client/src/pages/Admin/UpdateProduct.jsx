@@ -110,17 +110,15 @@ const UpdateProduct = () => {
             <AdminMenu />
           </div>
           <div className="col-span-12 md:col-span-9">
-            <h1 className="text-2xl font-bold mb-4">Update Product</h1>
-            <div className="bg-white p-6 rounded-lg shadow-lg w-full md:w-3/4">
+            <h1 className="text-2xl font-bold mb-4 text-gray-800">Update Product</h1>
+            <div className="bg-white p-6 rounded-lg shadow-lg">
               <Select
                 bordered={false}
                 placeholder="Select a category"
                 size="large"
                 showSearch
                 className="w-full mb-4"
-                onChange={(value) => {
-                  setCategory(value);
-                }}
+                onChange={(value) => setCategory(value)}
                 value={category}
               >
                 {categories?.map((c) => (
@@ -171,7 +169,7 @@ const UpdateProduct = () => {
                   type="text"
                   value={name}
                   placeholder="Product Name"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onChange={(e) => setName(e.target.value)}
                 />
               </div>
@@ -181,7 +179,7 @@ const UpdateProduct = () => {
                 <textarea
                   value={description}
                   placeholder="Product Description"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </div>
@@ -192,7 +190,7 @@ const UpdateProduct = () => {
                   type="number"
                   value={price}
                   placeholder="Product Price"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onChange={(e) => setPrice(e.target.value)}
                 />
               </div>
@@ -203,7 +201,7 @@ const UpdateProduct = () => {
                   type="number"
                   value={quantity}
                   placeholder="Product Quantity"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   onChange={(e) => setQuantity(e.target.value)}
                 />
               </div>
@@ -227,13 +225,13 @@ const UpdateProduct = () => {
               {/* Buttons */}
               <div className="flex gap-4">
                 <button
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-200"
                   onClick={handleUpdate}
                 >
                   UPDATE PRODUCT
                 </button>
                 <button
-                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                  className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition duration-200"
                   onClick={handleDelete}
                 >
                   DELETE PRODUCT
@@ -243,7 +241,6 @@ const UpdateProduct = () => {
           </div>
         </div>
       </div>
-
     </Layout>
   );
 };

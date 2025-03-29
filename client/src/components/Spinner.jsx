@@ -18,12 +18,11 @@ const Spinner = ({ path = "login" }) => {
 
   return (
     <>
-      <div
-        className="flex flex-column justify-center items-center"
-        style={{ height: "100vh" }}
-      >
-        <h1 className="text-center">redirecting to you in {count} second </h1>
-        <div className="flex justify-center items-center min-h-screen ml-2">
+      <div className="flex flex-col justify-center items-center h-screen bg-gray-100">
+        <h1 className="text-center text-lg md:text-xl font-semibold text-gray-800 mb-4">
+          Redirecting you in {count} second{count !== 1 ? 's' : ''}
+        </h1>
+        <div className="flex justify-center items-center">
           <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
         </div>
       </div>

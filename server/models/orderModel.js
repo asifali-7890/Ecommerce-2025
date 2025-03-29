@@ -12,7 +12,7 @@ const orderSchema = new mongoose.Schema(
         payment: {
             amount: { type: Number, required: true }, // Store the total amount of the order
             method: { type: String, enum: ["Credit Card", "PayPal", "Cash"], default: "Cash" }, // Optional: Specify payment method
-            status: { type: String, enum: ["Pending", "Completed", "Failed"], default: "Pending" }, // Track payment status
+            status: { type: String, enum: ["Pending", "Completed", "Failed", "Success"], default: "Success" }, // Track payment status
         },
         buyer: {
             type: mongoose.Schema.Types.ObjectId,

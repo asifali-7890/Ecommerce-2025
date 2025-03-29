@@ -1,1 +1,40 @@
 ﻿@import "tailwindcss";
+
+/* Apply Montserrat font globally */
+html,
+body {
+    font-family: "Mulish";
+}
+
+body {
+    padding-top: 90px; /* Adjust the value to match your header height */
+}
+
+/* Apply Poppins font to headings */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Poppins", sans-serif;
+}
+/* Apply Rubik font to buttons */
+button {
+    font-family: "Rubik", sans-serif;
+}
+/* Apply Nunito Sans font to paragraphs */
+p {
+    font-family: "Nunito Sans", sans-serif;
+}
+/* Apply Mulish font to form elements */
+input,
+select,
+textarea {
+    font-family: "Mulish", sans-serif;
+}
+/* Apply Roboto Mono font to code elements */
+code,
+pre {
+    font-family: "Roboto Mono", monospace;
+}

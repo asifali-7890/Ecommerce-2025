@@ -1,19 +1,14 @@
-import React, { useState, useEffect } from "react";
-// import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
 import { Checkbox, Radio } from "antd";
-import { Prices } from "../components/Prices";
-// import { useCart } from "../context/cart";
 import axios from "axios";
 import toast from "react-hot-toast";
-import Layout from "./../components/Layout/Layout";
+import Layout from "../components/Layout/Layout";
 import { AiOutlineReload } from "react-icons/ai";
-import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/cart";
+import { Prices } from "../components/Prices";
 
 const HomePage = () => {
-  // const navigate = useNavigate();
-  // const [cart, setCart] = useCart();
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [checked, setChecked] = useState([]);
@@ -23,116 +18,84 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
-  const [cart, setCart] = useCart();
+  const [, setCart] = useCart();
 
-  //get all cat
-  const getAllCategory = async () => {
-    try {
-      const { data } = await axios.get("/api/v1/category/get-categories");
-      if (data?.success) {
-        setCategories(data?.category);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
+  // Fetch categories and total products count once on mount
   useEffect(() => {
-    getAllCategory();
-    getTotal();
+    const fetchInitialData = async () => {
+      try {
+        const catRes = await axios.get("/api/v1/category/get-categories");
+        if (catRes.data?.success) setCategories(catRes.data.category);
+
+        const totalRes = await axios.get("/api/v1/product/product-count");
+        setTotal(totalRes.data?.total);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchInitialData();
   }, []);
 
-  // Memoize the getAllProducts function using useCallback
-  const getAllProducts = useCallback(async () => {
+  // Fetch products (pagination)
+  const fetchProducts = useCallback(async () => {
     try {
       setLoading(true);
-      const { data } = await axios.get(`/api/v1/product/product-list/${page}`);
+      const res = await axios.get(`/api/v1/product/product-list/${page}`);
       setLoading(false);
-      setProducts(data.products);
+      // For page 1, replace products; for later pages, append
+      setProducts((prev) => (page === 1 ? res.data.products : [...prev, ...res.data.products]));
     } catch (error) {
       setLoading(false);
-      console.log(error);
+      console.error(error);
     }
-  }, [page]); // Dependency: The function will only be recreated when `page` changes
-
-  //getTOtal COunt
-  const getTotal = async () => {
-    try {
-      const { data } = await axios.get("/api/v1/product/product-count");
-      setTotal(data?.total);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
-  useEffect(() => {
-    if (page === 1) return;
-    loadMore();
   }, [page]);
 
-  //load more
-  const loadMore = async () => {
-    try {
-      setLoading(true);
-      const { data } = await axios.get(`/api/v1/product/product-list/${page}`);
-      setLoading(false);
-      setProducts([...products, ...data?.products]);
-    } catch (error) {
-      console.log(error);
-      setLoading(false);
+  // Load products when page changes (but not on page 1 if filters are active)
+  useEffect(() => {
+    if (!checked.length && !radio.length) {
+      fetchProducts();
     }
-  };
+  }, [page, checked.length, radio.length, fetchProducts]);
 
-  // filter by cat
-  const handleFilter = (value, id) => {
-    let all = [...checked];
-    if (value) {
-      all.push(id);
-    } else {
-      all = all.filter((c) => c !== id);
+  // Filter products by category and price
+  const filterProducts = useCallback(async () => {
+    try {
+      const res = await axios.post("/api/v1/product/product-filters", { checked, radio });
+      setProducts(res.data?.products);
+    } catch (error) {
+      console.error(error);
     }
-    setChecked(all);
-  };
+  }, [checked, radio]);
 
   useEffect(() => {
-    if (!checked.length || !radio.length) getAllProducts();
-  }, [checked.length, radio.length, getAllProducts]);
-
-
-
-  // Use useCallback to memoize the filterProduct function
-  const filterProduct = useCallback(async () => {
-    try {
-      const { data } = await axios.post("/api/v1/product/product-filters", {
-        checked,
-        radio,
-      });
-      setProducts(data?.products);
-    } catch (error) {
-      console.log(error);
+    if (checked.length || radio.length) {
+      filterProducts();
     }
-  }, [checked, radio]); // Dependencies: The function will only be recreated when `checked` or `radio` change
+  }, [checked, radio, filterProducts]);
 
-  useEffect(() => {
-    if (checked.length || radio.length) filterProduct();
-  }, [checked, radio, filterProduct]);
+  // Handle category filter checkbox
+  const handleFilter = (checkedValue, id) => {
+    setChecked((prev) =>
+      checkedValue ? [...prev, id] : prev.filter((c) => c !== id)
+    );
+  };
 
   return (
-    <Layout title={"All Products - Best Offers"}>
-      {/* Banner Image */}
+    <Layout title="All Products - Best Offers">
+      {/* Banner */}
       <div className="w-full">
         <img
           src="/images/banner.png"
+          alt="Banner"
           className="w-full object-cover"
-          alt="banner image"
         />
       </div>
 
-      {/* Main Content */}
-      <div className="container mx-auto mt-8 flex flex-col md:flex-row">
+      <div className="container mx-auto mt-8 flex flex-col md:flex-row gap-6">
         {/* Filters Sidebar */}
-        <div className="w-full md:w-1/4 bg-white shadow-md p-6 mb-8 md:mb-0 rounded-lg">
-          <h4 className="text-lg font-bold text-center mb-6">Filter By Category</h4>
+        <aside className="w-full md:w-1/4 bg-white shadow p-6 rounded-lg">
+          <h4 className="text-xl font-bold text-center mb-4">Filter By Category</h4>
           <div className="flex flex-col space-y-2">
             {categories?.map((c) => (
               <Checkbox
@@ -145,67 +108,61 @@ const HomePage = () => {
             ))}
           </div>
 
-          {/* Price Filter */}
-          <h4 className="text-lg font-bold text-center mt-8 mb-6">Filter By Price</h4>
-          <div className="flex flex-col space-y-2">
-            <Radio.Group onChange={(e) => setRadio(e.target.value)}>
-              {Prices?.map((p) => (
-                <Radio key={p._id} value={p.array}>
-                  {p.name}
-                </Radio>
-              ))}
-            </Radio.Group>
-          </div>
+          <h4 className="text-xl font-bold text-center mt-8 mb-4">Filter By Price</h4>
+          <Radio.Group onChange={(e) => setRadio(e.target.value)}>
+            {Prices?.map((p) => (
+              <Radio key={p._id} value={p.array}>
+                {p.name}
+              </Radio>
+            ))}
+          </Radio.Group>
 
-          {/* Reset Filters */}
-          <div className="mt-8">
-            <button
-              className="w-full bg-red-500 text-white py-2 rounded-lg font-semibold hover:bg-red-600 transition duration-200"
-              onClick={() => window.location.reload()}
-            >
-              RESET FILTERS
-            </button>
-          </div>
-        </div>
+          <button
+            className="mt-8 w-full bg-red-500 text-white py-2 rounded-lg font-semibold hover:bg-red-600 transition duration-200"
+            onClick={() => window.location.reload()}
+          >
+            RESET FILTERS
+          </button>
+        </aside>
 
         {/* Products Section */}
-        <div className="w-full md:w-3/4">
+        <section className="w-full md:w-3/4">
           <h1 className="text-3xl font-bold text-center mb-8">All Products</h1>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {products?.map((p) => (
-              <div
-                className="bg-white shadow-lg rounded-lg overflow-hidden"
-                key={p._id}
-              >
+              <div key={p._id} className="bg-white flex flex-col justify-between shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
                 <img
                   src={`/api/v1/product/product-photo/${p._id}`}
-                  className="w-full h-48 object-cover"
                   alt={p.name}
+                  className="w-full h-48 object-cover"
                 />
                 <div className="p-4">
-                  <h5 className="font-bold text-lg mb-2">{p.name}</h5>
-                  <h5 className="text-gray-700 text-xl font-semibold mb-4">
+                  <h5 className="text-xl font-bold mb-2">{p.name}</h5>
+                  <p className="text-gray-700 text-lg font-semibold mb-4">
                     {p.price.toLocaleString("en-US", {
                       style: "currency",
                       currency: "USD",
                     })}
-                  </h5>
-                  <p className="text-gray-600 mb-4">
-                    {p.description.substring(0, 60)}...
                   </p>
-                  <div className="flex justify-between items-center">
+                  <p className="text-gray-600 mb-4">
+                    {p.description.length > 60 ? `${p.description.substring(0, 60)}...` : p.description}
+                  </p>
+                  <div className="flex justify-between items-center mt-4 gap-2 whitespace-nowrap">
                     <button
-                      className="bg-blue-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-600 transition duration-200"
+                      className="bg-blue-500  text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-600 transition duration-200 shadow-md hover:shadow-lg"
                       onClick={() => navigate(`/product/${p.slug}`)}
                     >
                       More Details
                     </button>
                     <button
-                      className="bg-gray-800 text-white py-2 px-4 rounded-lg font-medium hover:bg-gray-900 transition duration-200"
+                      className="bg-gray-400 text-white py-2 px-4 rounded-lg font-medium hover:bg-gray-600 transition duration-200 shadow-md hover:shadow-lg"
                       onClick={() => {
-                        setCart([...cart, p]);
-                        localStorage.setItem("cart", JSON.stringify([...cart, p]));
-                        toast.success("Item Added to cart");
+                        setCart((prevCart) => {
+                          const newCart = [...prevCart, p];
+                          localStorage.setItem("cart", JSON.stringify(newCart));
+                          return newCart;
+                        });
+                        toast.success("Item Added to Cart");
                       }}
                     >
                       ADD TO CART
@@ -217,26 +174,21 @@ const HomePage = () => {
           </div>
 
           {/* Load More Button */}
-          <div className="mt-8 text-center">
+          <div className="m-8 text-center">
             {products && products.length < total && (
               <button
                 className="bg-blue-500 text-white py-2 px-6 rounded-lg font-medium hover:bg-blue-600 transition duration-200"
-                onClick={(e) => {
-                  e.preventDefault();
-                  setPage(page + 1);
-                }}
+                onClick={() => setPage((prev) => prev + 1)}
               >
-                {loading ? (
-                  "Loading ..."
-                ) : (
+                {loading ? "Loading..." : (
                   <>
-                    {products ? <span>Load More <AiOutlineReload className="inline-block ml-2" /></span> : ''}
+                    Load More <AiOutlineReload className="inline ml-2" />
                   </>
                 )}
               </button>
             )}
           </div>
-        </div>
+        </section>
       </div>
     </Layout>
   );
