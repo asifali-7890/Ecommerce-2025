@@ -2,12 +2,15 @@ import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout/Layout";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
+import { useCart } from "../context/cart";
+import toast from "react-hot-toast";
 
 const ProductDetails = () => {
   const params = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState({});
   const [relatedProducts, setRelatedProducts] = useState([]);
+  const [, setCart] = useCart();
 
   // Fetch product details
   useEffect(() => {
@@ -36,9 +39,9 @@ const ProductDetails = () => {
 
   return (
     <Layout>
-      <div className="container mx-auto my-12 pt-10">
+      <div className="container mx-auto ">
         {/* Product Details Section */}
-        <div className="flex flex-col md:flex-row items-center md:items-start space-y-8 md:space-y-0 md:space-x-12">
+        <div className="flex flex-col md:flex-row p-2 items-center md:items-start space-y-8 md:space-y-0 md:space-x-12">
           <div className="w-full md:w-1/2 mt-16">
             <img
               src={`/api/v1/product/product-photo/${product._id}`}
@@ -57,7 +60,16 @@ const ProductDetails = () => {
               Price: {product?.price?.toLocaleString("en-US", { style: "currency", currency: "USD" })}
             </h6>
             <h6 className="text-lg font-semibold">Category: {product?.category?.name}</h6>
-            <button className="mt-6 px-8 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition">
+            <button
+              className="mt-6 px-8 py-3 bg-gray-400 font-bold text-white rounded-lg hover:bg-gray-700 transition"
+              onClick={() => {
+                setCart((prevCart) => {
+                  const newCart = [...prevCart, product];
+                  localStorage.setItem("cart", JSON.stringify(newCart));
+                  return newCart;
+                });
+                toast.success("Item Added to Cart");
+              }}>
               ADD TO CART
             </button>
           </div>
@@ -71,7 +83,7 @@ const ProductDetails = () => {
           {relatedProducts.length < 1 ? (
             <p className="text-center text-gray-500">No Similar Products found</p>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 p-2">
               {relatedProducts?.map((p) => (
                 <div className="border flex flex-col justify-between rounded-lg p-6 shadow-md transition-transform transform hover:scale-105" key={p._id}>
                   <img
@@ -88,13 +100,14 @@ const ProductDetails = () => {
                   <p className="text-sm text-gray-600 mb-6">{p.description.substring(0, 60)}...</p>
                   <div className="flex space-x-6">
                     <button
-                      className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
+                      className="px-6 py-3 bg-pink-300 border-2 border-pink-300 text-white rounded-lg hover:border-pink-950 hover:bg-blue-600 transition-transform transform hover:scale-105 duration-200"
                       onClick={() => navigate(`/product/${p.slug}`)}
                     >
                       More Details
                     </button>
                   </div>
                 </div>
+
               ))}
             </div>
           )}

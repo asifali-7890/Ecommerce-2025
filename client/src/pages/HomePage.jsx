@@ -88,34 +88,39 @@ const HomePage = () => {
         <img
           src="/images/banner.png"
           alt="Banner"
-          className="w-full object-cover"
+          className="w-full object-cover h-64 md:h-96"
+          style={{
+            filter: "brightness(0.8)",
+          }}
         />
       </div>
 
-      <div className="container mx-auto mt-8 flex flex-col md:flex-row gap-6">
+      <div className="container mx-auto  flex flex-col md:flex-row gap-6">
         {/* Filters Sidebar */}
         <aside className="w-full md:w-1/4 bg-white shadow p-6 rounded-lg">
           <h4 className="text-xl font-bold text-center mb-4">Filter By Category</h4>
-          <div className="flex flex-col space-y-2">
+          <div className="flex flex-col space-y-2 ">
             {categories?.map((c) => (
               <Checkbox
                 key={c._id}
                 onChange={(e) => handleFilter(e.target.checked, c._id)}
-                className="text-gray-700"
+                className="text-gray-700 "
               >
-                {c.name}
+                <span className="text-lg">{c.name}</span>
               </Checkbox>
             ))}
           </div>
 
           <h4 className="text-xl font-bold text-center mt-8 mb-4">Filter By Price</h4>
-          <Radio.Group onChange={(e) => setRadio(e.target.value)}>
-            {Prices?.map((p) => (
-              <Radio key={p._id} value={p.array}>
-                {p.name}
-              </Radio>
-            ))}
-          </Radio.Group>
+          <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4 py-2">
+            <Radio.Group onChange={(e) => setRadio(e.target.value)} className="flex flex-col md:flex-row">
+              {Prices?.map((p) => (
+                <Radio key={p._id} value={p.array} className="md:mr-4">
+                  <span className="text-lg">{p.name}</span>
+                </Radio>
+              ))}
+            </Radio.Group>
+          </div>
 
           <button
             className="mt-8 w-full bg-red-500 text-white py-2 rounded-lg font-semibold hover:bg-red-600 transition duration-200"
@@ -126,36 +131,45 @@ const HomePage = () => {
         </aside>
 
         {/* Products Section */}
-        <section className="w-full md:w-3/4">
+        <section className="w-full md:w-3/4 ">
           <h1 className="text-3xl font-bold text-center mb-8">All Products</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 m-3">
             {products?.map((p) => (
-              <div key={p._id} className="bg-white flex flex-col justify-between shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
+              <div
+                key={p._id}
+                className="bg-white flex flex-col shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105"
+              >
+                {/* Product Image */}
                 <img
                   src={`/api/v1/product/product-photo/${p._id}`}
                   alt={p.name}
                   className="w-full h-48 object-cover"
                 />
-                <div className="p-4">
+
+                {/* Product Info */}
+                <div className="p-4 flex flex-col flex-grow">
                   <h5 className="text-xl font-bold mb-2">{p.name}</h5>
-                  <p className="text-gray-700 text-lg font-semibold mb-4">
-                    {p.price.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    })}
+
+                  <p className="text-gray-700 text-lg font-semibold mb-2">
+                    {p.price
+                      ? p.price.toLocaleString("en-US", { style: "currency", currency: "USD" })
+                      : "Price not available"}
                   </p>
-                  <p className="text-gray-600 mb-4">
+
+                  <p className="text-gray-600 mb-4 flex-grow">
                     {p.description.length > 60 ? `${p.description.substring(0, 60)}...` : p.description}
                   </p>
-                  <div className="flex justify-between items-center mt-4 gap-2 whitespace-nowrap">
+
+                  {/* Buttons */}
+                  <div className="flex flex-wrap md:flex-nowrap justify-between items-center gap-2 mt-4">
                     <button
-                      className="bg-blue-500  text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-600 transition duration-200 shadow-md hover:shadow-lg"
+                      className="bg-blue-500 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-600 transition duration-200 shadow-md hover:shadow-lg w-full md:w-auto"
                       onClick={() => navigate(`/product/${p.slug}`)}
                     >
                       More Details
                     </button>
                     <button
-                      className="bg-gray-400 text-white py-2 px-4 rounded-lg font-medium hover:bg-gray-600 transition duration-200 shadow-md hover:shadow-lg"
+                      className="bg-gray-400 text-white py-2 px-4 rounded-lg font-medium hover:bg-gray-600 transition duration-200 shadow-md hover:shadow-lg w-full md:w-auto"
                       onClick={() => {
                         setCart((prevCart) => {
                           const newCart = [...prevCart, p];
@@ -170,6 +184,7 @@ const HomePage = () => {
                   </div>
                 </div>
               </div>
+
             ))}
           </div>
 

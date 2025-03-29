@@ -7,6 +7,7 @@ import cors from 'cors';
 import connectDB from './config/db.js';
 import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
+import contactRoutes from "./routes/contactRoutes.js";
 
 // Load environment variables
 dotenv.config();
@@ -30,6 +31,7 @@ app.use(morgan('dev'));     // Log HTTP requests
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/category", categoryRoutes);
 app.use("/api/v1/product", productRoutes);
+app.use("/api/v1/contact", contactRoutes);
 
 // Define a basic route
 app.get('/', (req, res) => {

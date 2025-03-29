@@ -3,6 +3,8 @@ import Footer from "./Footer.jsx";
 import Header from "./Header.jsx";
 import { Helmet } from "react-helmet";
 import { Toaster } from "react-hot-toast";
+import ScrollToTop from "./ScrollToTop.jsx";
+
 const Layout = ({ children, title, description, keywords, author }) => {
   return (
     <div>
@@ -17,6 +19,8 @@ const Layout = ({ children, title, description, keywords, author }) => {
       <main className="min-h-[calc(100vh-110.4px)]">
         {children}
       </main>
+      <Toaster />
+      <ScrollToTop smooth />
       <Footer />
     </div>
   );

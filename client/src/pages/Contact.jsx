@@ -1,10 +1,11 @@
 import React from "react";
 import Layout from "./../components/Layout/Layout";
 import { BiMailSend, BiPhoneCall, BiSupport } from "react-icons/bi";
+import ContactPage from "./ContactPage";
 const Contact = () => {
   return (
     <Layout title={"Contact Us"}>
-      <div className="container mx-auto p-6 mt-20">
+      <div className="container mx-auto p-6">
         <div className="flex flex-col md:flex-row items-center">
           <div className="w-full md:w-1/2 mb-6 md:mb-0">
             <img
@@ -14,7 +15,7 @@ const Contact = () => {
             />
           </div>
           <div className="w-full md:w-1/2 md:pl-8">
-            <h1 className="bg-gray-800 text-white text-center p-4 rounded-lg mb-4">CONTACT US</h1>
+            <ContactPage />
             <p className="text-gray-700 text-justify mb-4">
               If you have any queries or need information about our products, feel free to call us anytime. We are available 24/7.
             </p>

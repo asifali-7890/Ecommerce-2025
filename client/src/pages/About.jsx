@@ -4,7 +4,7 @@ import Layout from "./../components/Layout/Layout";
 const About = () => {
   return (
     <Layout title={"About Us - Ecommerce App"}>
-      <div className="container mx-auto p-6 mt-20">
+      <div className="container mx-auto p-6">
         <div className="flex flex-col md:flex-row items-center">
           <div className="w-full md:w-1/2 mb-6 md:mb-0">
             <img

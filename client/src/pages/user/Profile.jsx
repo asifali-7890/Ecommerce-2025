@@ -14,6 +14,8 @@ const Profile = () => {
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [loading, setLoading] = useState(false); // State to control spinner visibility
+
 
   //get user data
   useEffect(() => {
@@ -27,6 +29,8 @@ const Profile = () => {
   // form function
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start showing spinner
+
     try {
       const { data } = await axios.put("/api/v1/auth/profile", {
         name,
@@ -48,6 +52,8 @@ const Profile = () => {
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false); // Hide spinner after API call completes
     }
   };
   return (
@@ -115,11 +121,16 @@ const Profile = () => {
                   />
                 </div>
 
+
                 <button
                   type="submit"
-                  className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition duration-200"
+                  className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 flex justify-center items-center"
                 >
-                  Update
+                  {loading ? (
+                    <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <span>Update</span>
+                  )}
                 </button>
               </form>
             </div>

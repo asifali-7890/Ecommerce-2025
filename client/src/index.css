@@ -7,7 +7,14 @@ body {
 }
 
 body {
-    padding-top: 90px; /* Adjust the value to match your header height */
+    padding-top: 68px; /* Default for larger screens */
+}
+
+@media (max-width: 640px) {
+    /* Small screens */
+    body {
+        padding-top: 50px;
+    }
 }
 
 /* Apply Poppins font to headings */

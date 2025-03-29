@@ -3,13 +3,13 @@ import axios from 'axios';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import Layout from '../../components/Layout/Layout';
-import { Toaster } from 'react-hot-toast'
+import { Toaster } from 'react-hot-toast';
 import { useAuth } from "../../context/auth";
-
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false); // State to control spinner visibility
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -19,7 +19,7 @@ const Login = () => {
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoading(true); // Start showing spinner
     try {
       const response = await axios.post('/api/v1/auth/login', { email, password });
 
@@ -38,8 +38,10 @@ const Login = () => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error)
+      console.log(error);
       toast.error('Something went wrong');
+    } finally {
+      setLoading(false); // Hide spinner after API call completes
     }
   };
 
@@ -80,10 +82,16 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300"
+              className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 flex justify-center items-center"
             >
-              Login
+              {loading ? (
+                <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <span>Login</span>
+              )}
             </button>
+
+
             <p className="text-center text-sm text-gray-600 pt-4 flex justify-between">
               <button
                 type="button"

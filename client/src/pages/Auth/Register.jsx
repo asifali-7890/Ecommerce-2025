@@ -13,11 +13,15 @@ const Register = () => {
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
   const [answer, setAnswer] = useState("");
+  const [loading, setLoading] = useState(false); // State to control spinner visibility
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start showing spinner
+
+
     try {
       const res = await axios.post("/api/v1/auth/register", {
         name,
@@ -39,6 +43,8 @@ const Register = () => {
     } catch (error) {
       console.log(error);
       toast.error("Something went wrong");
+    } finally {
+      setLoading(false); // Hide spinner after API call completes
     }
   };
 
@@ -142,10 +148,15 @@ const Register = () => {
             <div>
               <button
                 type="submit"
-                className="w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200"
+                className="w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 transition duration-300 flex justify-center items-center"
               >
-                Register
+                {loading ? (
+                  <div className="w-6 h-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                ) : (
+                  <span>Register</span>
+                )}
               </button>
+
 
               <p className="text-center text-sm text-gray-600 pt-5">
                 Already have an account? <Link to="/login" className="text-blue-500 hover:underline">Login</Link>

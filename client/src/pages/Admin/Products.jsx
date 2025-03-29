@@ -25,7 +25,7 @@ const Products = () => {
 
   return (
     <Layout>
-      <div className="flex flex-col md:flex-row dashboard p-4 pt-24">
+      <div className="flex flex-col md:flex-row dashboard p-4 ">
         <div className="w-full md:w-1/4">
           <AdminMenu />
         </div>

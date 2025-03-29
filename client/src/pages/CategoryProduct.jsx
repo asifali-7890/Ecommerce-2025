@@ -33,9 +33,9 @@ const CategoryProduct = () => {
           {products?.length} result{products?.length !== 1 && "s"} found
         </h6>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-2">
           {products?.map((p) => (
-            <div key={p._id} className="card bg-white shadow-md hover:shadow-lg rounded-lg overflow-hidden transition-shadow duration-300">
+            <div key={p._id} className="card flex justify-between flex-col bg-white shadow-md hover:shadow-lg rounded-lg overflow-hidden transition-shadow duration-300">
               <img
                 src={`/api/v1/product/product-photo/${p._id}`}
                 alt={p.name}

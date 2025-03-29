@@ -91,7 +91,7 @@ const CreateCategory = () => {
   return (
     <Layout title={"Dashboard - Create Category"}>
       <Toaster />
-      <div className="m-3 p-12 bg-white shadow-lg rounded-lg mt-20">
+      <div className=" p-4 md:p-12 bg-white shadow-lg rounded-lg">
         <div className="flex flex-col md:flex-row gap-5">
           {/* Admin Menu Section */}
           <div className="w-full md:w-1/4">
